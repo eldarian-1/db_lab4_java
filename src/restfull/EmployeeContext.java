@@ -3,11 +3,21 @@ package restfull;
 import java.sql.*;
 import java.util.ArrayList;
 
-public class MyContext {
+public class EmployeeContext {
+	
+	private Connection _Connection;
+	
+	public EmployeeContext() throws Exception {
+		_Connection = MyConnection.getInstance();
+	}
+	
+	public Connection getConnection() {
+		return _Connection;
+	}
 	
 	public ArrayList<Employee> select() throws SQLException {
 		ArrayList<Employee> result = new ArrayList<Employee>();
-		Statement statement = MyConnection.getInstance().createStatement();
+		Statement statement = _Connection.createStatement();
         ResultSet resultSet = statement.executeQuery("SELECT * FROM employee");
         while(resultSet.next()){
             Employee temp = new Employee();
@@ -26,7 +36,7 @@ public class MyContext {
 	public Employee select(int employeeId) throws SQLException {
 		Employee result = new Employee();
 		String sql = "SELECT * FROM employee WHERE EmployeeId=?";
-		PreparedStatement statement = MyConnection.getInstance().prepareStatement(sql);
+		PreparedStatement statement = _Connection.prepareStatement(sql);
 		statement.setInt(1, employeeId);
 		ResultSet resultSet = statement.executeQuery();
         if(resultSet.next()){
@@ -43,7 +53,7 @@ public class MyContext {
 	
 	public int insert(Employee employee) throws SQLException {
 		String sql = "INSERT INTO employee (FirstName, LastName, PhoneNumber, Salary, Address, Expirience) Values (?, ?, ?, ?, ?, ?)";
-        PreparedStatement preparedStatement = MyConnection.getInstance().prepareStatement(sql);
+        PreparedStatement preparedStatement = _Connection.prepareStatement(sql);
         preparedStatement.setString(1, employee.getFirstName());
         preparedStatement.setString(2, employee.getLastName());
         preparedStatement.setString(3, employee.getPhoneNumber());
@@ -55,7 +65,7 @@ public class MyContext {
 	
 	public int update(Employee employee) throws SQLException {
 		String sql = "UPDATE employee SET FirstName=?, LastName=?, PhoneNumber=?, Salary=?, Address=?, Expirience=? WHERE EmployeeId=?";
-        PreparedStatement preparedStatement = MyConnection.getInstance().prepareStatement(sql);
+        PreparedStatement preparedStatement = _Connection.prepareStatement(sql);
         preparedStatement.setString(1, employee.getFirstName());
         preparedStatement.setString(2, employee.getLastName());
         preparedStatement.setString(3, employee.getPhoneNumber());
@@ -68,7 +78,7 @@ public class MyContext {
 	
 	public int delete(Employee employee) throws SQLException {
 		String sql = "DELETE FROM employee WHERE EmployeeId=?";
-        PreparedStatement preparedStatement = MyConnection.getInstance().prepareStatement(sql);
+        PreparedStatement preparedStatement = _Connection.prepareStatement(sql);
         preparedStatement.setInt(1, employee.getEmployeeId());
         return  preparedStatement.executeUpdate();
 	}
