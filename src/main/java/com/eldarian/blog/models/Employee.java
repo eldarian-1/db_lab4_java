@@ -18,16 +18,6 @@ public class Employee {
     private String address;
     private int expirience;
 
-    public Employee(){
-        employeeId = 0l;
-        firstName = "Sanya";
-        lastName = "Petrenko";
-        phoneNumber = "5674346346";
-        salary = 567434;
-        address = "huichicki";
-        expirience = 3;
-    }
-
     public Long getEmployeeId() {
         return employeeId;
     }

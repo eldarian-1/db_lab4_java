@@ -6,7 +6,7 @@
 <body>
 
 <td th:fragment="link(id)">
-    <a th:href="/?id=${id}" th:text="${id}" />
+    <a th:href="'/edit?id=' + ${id}" th:text="${id}" />
 </td>
 
 <div th:fragment="dbtable(emplist)" class="table">
@@ -21,7 +21,7 @@
             <td>Expirience</td>
         </tr>
         <tr th:each="emp : ${emplist}">
-            <td th:replace="link(id = ${emp.employeeId})" />
+            <td th:replace="fragments :: link(id = ${emp.employeeId})" />
             <td th:text="${emp.firstName}" />
             <td th:text="${emp.lastName}" />
             <td th:text="${emp.phoneNumber}" />
@@ -32,13 +32,16 @@
     </table>
 </div>
 
-<div th:fragment="button(iscreating)">
-    <input type="submit" value="Добавить">
+<div class="buttons" th:fragment="button(id, creating)">
+    <input th:if="${creating}" type="submit" value="Добавить">
+    <a th:if="${!creating}" href="/">Отмена</a>
+    <a th:if="${!creating}" th:href="'/delete?id=' + ${id}">Удалить</a>
+    <input th:if="${!creating}" type="submit" value="Обновить">
 </div>
 
-<div th:fragment="form(emp)">
+<div th:fragment="form(emp, adding)">
     <div class="form">
-        <form method="post" autocomplete="off" action="?action=<?=$action?>">
+        <form method="post" autocomplete="off" th:action="${adding} ? '/insert' : '/update?id=' + ${emp.employeeId}">
             <table>
                 <tr>
                     <td>Имя</td>
@@ -65,7 +68,7 @@
                     <td><input type="text" name="expirience" th:value="${emp.expirience}"></td>
                 </tr>
             </table>
-            <div class="buttons"><? $getButtons(); ?></div>
+            <div th:replace="fragments :: button(id = ${emp.employeeId}, creating = ${adding})" />
         </form>
     </div>
 </div>
