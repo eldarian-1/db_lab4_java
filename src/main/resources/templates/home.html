@@ -1,0 +1,16 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${title}" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link href="../static/styles/style.css" th:href="@{/styles/style.css}" rel="stylesheet" />
+</head>
+<body>
+
+<div class="box">
+    <div th:replace="fragments.html :: dbtable(emplist = ${emps})" />
+    <div th:replace="fragments.html :: form(emp = ${defemp})" />
+</div>
+
+</body>
+</html>
